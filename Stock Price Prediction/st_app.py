@@ -57,8 +57,8 @@ if csv_file is not None:
             # Feature Scaling for fast training of neural networks
             from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-            # Choosing between Standardization or normalization
-            #sc = StandardScaler()
+            #normalization
+            
             sc=MinMaxScaler()
 
             DataScaler = sc.fit(FullData)
@@ -78,7 +78,7 @@ if csv_file is not None:
                 X_samples.append(x_sample)
                 y_samples.append(y_sample)
 
-            ################################################
+            
             # Reshape the Input as a 3D (number of samples, Time Steps, Features)
             X_data=np.array(X_samples)
             X_data=X_data.reshape(X_data.shape[0],X_data.shape[1], 1)
@@ -157,7 +157,7 @@ if csv_file is not None:
                 NumFeatures=1
                 Last10Days=Last10Days.reshape(NumSamples,TimeSteps,NumFeatures)
 
-                #############################
+                
 
                 # Making predictions on data
                 predicted_Price = regressor.predict(Last10Days)

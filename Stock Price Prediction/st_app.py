@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+
 import numpy as np
 from tensorflow import keras
 # Importing the Keras libraries and packages
@@ -57,8 +58,8 @@ if csv_file is not None:
             # Feature Scaling for fast training of neural networks
             from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-            #normalization
-            
+            # Choosing between Standardization or normalization
+            #sc = StandardScaler()
             sc=MinMaxScaler()
 
             DataScaler = sc.fit(FullData)
@@ -78,7 +79,7 @@ if csv_file is not None:
                 X_samples.append(x_sample)
                 y_samples.append(y_sample)
 
-            
+            ################################################
             # Reshape the Input as a 3D (number of samples, Time Steps, Features)
             X_data=np.array(X_samples)
             X_data=X_data.reshape(X_data.shape[0],X_data.shape[1], 1)
@@ -135,7 +136,7 @@ if csv_file is not None:
             with st.spinner('Predecting Stock Price...'):
                 
                 
-                regressor.fit(X_train, y_train, batch_size = 5, epochs = 100)
+                history =regressor.fit(X_train, y_train, batch_size = 5, epochs = 100)
 
                 # Generating predictions on full data
                 TrainPredictions=DataScaler.inverse_transform(regressor.predict(X_train))
@@ -157,7 +158,7 @@ if csv_file is not None:
                 NumFeatures=1
                 Last10Days=Last10Days.reshape(NumSamples,TimeSteps,NumFeatures)
 
-                
+                #############################
 
                 # Making predictions on data
                 predicted_Price = regressor.predict(Last10Days)
@@ -165,11 +166,17 @@ if csv_file is not None:
 
                 predicted_Price_string='Price For Tomorrow Will be: '
                     
-                st.write(predicted_Price_string)
+                
+                loss = history.history['loss'][-1]
                
+            if loss > 0.001:
+                st.write('Loss Exceeded than Acceptable , Please Predict Again')
 
-            st.success(str(predicted_Price[0][0])+' Rs')
-            
+            else :
+
+                st.write(predicted_Price_string)
+                st.success(str(predicted_Price[0][0])+' Rs')
+                
             
 
 
